@@ -2,6 +2,7 @@
 using EchoBot.Services;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Teams;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -50,6 +51,18 @@ namespace EchoBot.Dialogs
         // ユーザ発言をCosmos DBに保存して、Semantic Kernel APIにPOSTリクエストする
         private async Task<DialogTurnResult> SendAnswerAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
+            // Teamsの場合、AadObjectIdを取得
+            if (stepContext.Context.Activity.ChannelId == "msteams")
+            {
+                // ユーザ情報を取得
+                var member = await TeamsInfo.GetMemberAsync(stepContext.Context, stepContext.Context.Activity.From.Id, cancellationToken);
+
+                _aadObjectId = member.AadObjectId;
+            }
+            else
+            {
+                _aadObjectId = "Unknown";
+            }
 
             // ユーザ発言を取得
             var userMessage = stepContext.Context.Activity.Text;
