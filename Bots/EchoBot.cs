@@ -2,52 +2,44 @@
 // Licensed under the MIT License.
 
 using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Schema;
-using System;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Dialog = EchoBot.Dialogs.Dialog;
 
 namespace Microsoft.BotBuilderSamples.Bots
 {
-    public class EchoBot : ActivityHandler
+
+    public class EchoBot<T> : ActivityHandler where T : Dialog
     {
-        // HTTPクライアントを作成して初期化
+        protected readonly Dialog Dialog;
+        protected readonly BotState ConversationState;
+        protected readonly BotState UserState;
+        protected readonly ILogger Logger;
+
+        // HttpClientオブジェクトを作成
         private static readonly HttpClient client = new HttpClient();
 
+        // コンストラクタ
+        public EchoBot(ConversationState conversationState, UserState userState, T dialog, ILogger<EchoBot<T>> logger)
+        {
+            ConversationState = conversationState;
+            UserState = userState;
+            Dialog = dialog;
+            Logger = logger;
+        }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
-            try
-            {
-                Console.WriteLine(turnContext.Activity.Text);
+            Logger.LogInformation("Running dialog with Message Activity.");
 
-                //リクエストボディを作成
-                var json = $"{{ \"text\" : \"{turnContext.Activity.Text}\" }}";
-                var content = new StringContent(json, Encoding.UTF8, @"application/json");
+            await Dialog.RunAsync(turnContext, ConversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
 
-                //POSTリクエストを送信
-                var response = await client.PostAsync(
-                    "https://semantickernelapi20240215022752.azurewebsites.net/api/HttpExample",
-                    content,
-                    cancellationToken
-                    );
-
-                //エラーチェック
-                response.EnsureSuccessStatusCode();
-
-                //レスポンスを文字列として取得
-                var replyText = await response.Content.ReadAsStringAsync();
-
-                await turnContext.SendActivityAsync(MessageFactory.Text(replyText, replyText), cancellationToken);
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
         }
 
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
