@@ -1,0 +1,10 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "OpenAI:DeploymentName": "ChatGPT35-turbo-Test-20230529",
+    "OpenAI:Endpoint": "https://cft-c-test.openai.azure.com/",
+    "OpenAI:ApiKey": "f20327215b9248219399de6b19a68506"
+  }
+}
