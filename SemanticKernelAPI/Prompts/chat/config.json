@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "type": "completion",
-  "description": "ƒ†[ƒU‚Ì¿–â‚Ö‚Ìƒ`ƒƒƒbƒg‰ñ“š‚ğì¬",
+  "description": "ãƒ¦ãƒ¼ã‚¶ã®è³ªå•ã¸ã®ãƒãƒ£ãƒƒãƒˆå›ç­”ã‚’ä½œæˆ",
   "execution_settings": {
     "gpt-3.5-turbo": {
       "model_id": "gpt-35-turbo",
@@ -12,7 +12,7 @@
   "input_variables": [
     {
       "name": "input",
-      "description": "ƒ†[ƒU‚ÌƒŠƒNƒGƒXƒg",
+      "description": "ãƒ¦ãƒ¼ã‚¶ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆ",
       "required": true
     }
   ]

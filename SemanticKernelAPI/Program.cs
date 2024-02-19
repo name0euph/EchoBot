@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
