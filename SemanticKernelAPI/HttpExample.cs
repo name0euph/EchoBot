@@ -30,17 +30,21 @@ namespace SemanticKernelAPI
             // リクエストのBodyを取り出し
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
-            // JsonデータをｐSummarizeRequestオブジェクトにデシリアライズ
+            // JsonデータをSummarizeRequestオブジェクトにデシリアライズ
             var data = JsonConvert.DeserializeObject<SummarizeRequest>(requestBody);
 
             // 要約のプロンプトテンプレートを作成
-            var prompt = @"{{$input}}
-            なるべく短く要約してください。";
+            var prompt = @"
+            <message role=""system"">あなたはAIチャットボットです。ユーザの質問に対して回答してください。
+            回答が分からないものには「分かりません」と回答してください。</message>
+
+            <message role=""user"">{{$input}}</message>
+            ";
 
             // 要約を実行する関数を作成
             var summarize = _kernel.CreateFunctionFromPrompt(
                 promptTemplate: prompt,
-                executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = 200 }
+                executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = 1000 }
                 );
 
             try
