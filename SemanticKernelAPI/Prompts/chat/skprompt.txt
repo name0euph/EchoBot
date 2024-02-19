@@ -1,0 +1,4 @@
+<message role=""system"">あなたはAIチャットボットです。ユーザの質問に対して回答してください。
+回答が分からないものには「分かりません」と回答してください。</message>
+
+<message role=""user"">{{$input}}</message>

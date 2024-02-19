@@ -33,6 +33,9 @@ namespace SemanticKernelAPI
             // JsonデータをSummarizeRequestオブジェクトにデシリアライズ
             var data = JsonConvert.DeserializeObject<SummarizeRequest>(requestBody);
 
+            // ./Promptsディレクトリからプロンプトをローディング
+            var prompts = _kernel.CreatePluginFromPromptDirectory("Prompts");
+
             // 要約のプロンプトテンプレートを作成
             var prompt = @"
             <message role=""system"">あなたはAIチャットボットです。ユーザの質問に対して回答してください。
@@ -42,10 +45,10 @@ namespace SemanticKernelAPI
             ";
 
             // 要約を実行する関数を作成
-            var summarize = _kernel.CreateFunctionFromPrompt(
-                promptTemplate: prompt,
-                executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = 1000 }
-                );
+//            var summarize = _kernel.CreateFunctionFromPrompt(
+  //              promptTemplate: prompt,
+    //            executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = 200 }
+      //          );
 
             try
             {
@@ -55,7 +58,9 @@ namespace SemanticKernelAPI
                     throw new ArgumentNullException(nameof(req));
                 }
 
-                var result = await _kernel.InvokeAsync(summarize, new KernelArguments() { ["input"] = data.Text });
+                var result = await _kernel.InvokeAsync(
+                    prompts["chat"],
+                    new() { ["input"] = data.Text });
 
                 Console.WriteLine(result);
 

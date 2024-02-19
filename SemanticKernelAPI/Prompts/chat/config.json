@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "type": "completion",
+  "description": "ユーザの質問へのチャット回答を作成",
+  "execution_settings": {
+    "gpt-3.5-turbo": {
+      "model_id": "gpt-35-turbo",
+      "max_tokens": 200,
+      "temperature": 0.1
+    }
+  },
+  "input_variables": [
+    {
+      "name": "input",
+      "description": "ユーザのリクエスト",
+      "required": true
+    }
+  ]
+}
