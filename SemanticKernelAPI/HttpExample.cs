@@ -1,12 +1,9 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
 
 namespace SemanticKernelAPI
 {
@@ -26,23 +23,14 @@ namespace SemanticKernelAPI
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
-
-            // リクエストのBodyを取り出し
+            // ???N?G?X?g??Body?????o??
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
             // JsonデータをSummarizeRequestオブジェクトにデシリアライズ
             var data = JsonConvert.DeserializeObject<SummarizeRequest>(requestBody);
 
-            // ./Promptsディレクトリからプロンプトをローディング
-            var prompts = _kernel.CreatePluginFromPromptDirectory("Prompts");
-
-            // 要約のプロンプトテンプレートを作成
-            var prompt = @"
-            <message role=""system"">あなたはAIチャットボットです。ユーザの質問に対して回答してください。
-            回答が分からないものには「分かりません」と回答してください。</message>
-
-            <message role=""user"">{{$input}}</message>
-            ";
+            // ./Prompts?f?B???N?g??????v?????v?g?????[?f?B???O
+            var prompts = _kernel.CreatePluginFromPromptDirectory("../../../Prompts");
 
             try
             {
@@ -52,6 +40,7 @@ namespace SemanticKernelAPI
                     throw new ArgumentNullException(nameof(req));
                 }
 
+                // API???N?G?X?g???s???A??????擾
                 var result = await _kernel.InvokeAsync(
                     prompts["chat"],
                     new() { ["input"] = data.Text });
