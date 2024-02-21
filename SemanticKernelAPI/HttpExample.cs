@@ -44,12 +44,6 @@ namespace SemanticKernelAPI
             <message role=""user"">{{$input}}</message>
             ";
 
-            // 要約を実行する関数を作成
-//            var summarize = _kernel.CreateFunctionFromPrompt(
-  //              promptTemplate: prompt,
-    //            executionSettings: new OpenAIPromptExecutionSettings { MaxTokens = 200 }
-      //          );
-
             try
             {
                 // リクエストボディがない場合は例外をスロー
