@@ -23,13 +23,13 @@ namespace SemanticKernelAPI
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            // ???N?G?X?g??Body?????o??
+            // リクエストボディを取得
             var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
             // JsonデータをSummarizeRequestオブジェクトにデシリアライズ
             var data = JsonConvert.DeserializeObject<SummarizeRequest>(requestBody);
 
-            // ./Prompts?f?B???N?g??????v?????v?g?????[?f?B???O
+            // ./Promptsディレクトリにあるプロンプトを読み込む
             var prompts = _kernel.CreatePluginFromPromptDirectory("../../../Prompts");
 
             try
@@ -40,7 +40,7 @@ namespace SemanticKernelAPI
                     throw new ArgumentNullException(nameof(req));
                 }
 
-                // API???N?G?X?g???s???A??????擾
+                // APIを呼び出して要約結果を取得
                 var result = await _kernel.InvokeAsync(
                     prompts["chat"],
                     new() { ["input"] = data.Text });
